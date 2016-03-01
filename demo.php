@@ -7,6 +7,7 @@
  * @link https://github.com/yuecode
  * @date 2016-3-1
  */
+
 error_reporting(E_ALL ^ E_NOTICE);
 require_once './src/QcloudApi/QcloudApi.php';
 $config = [
