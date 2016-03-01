@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qcloudapi 内存图表测试</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="container" style="max-width:800px;height:400px;">
+        </div>
+
+        <script type="text/javascript" src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script> 
+        <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script> 
+        <script type="text/javascript">
+            $(function () {
+
+                $("#container").highcharts({
+                    global: {
+                        useUTC: false
+                    },
+                    lang: {
+                        loagding: '加载中.....',
+                        printChart: "打印图表",
+                        downloadPNG: "下载 PNG 位图",
+                        downloadJPEG: "下载 JPEG 位图",
+                        downloadPDF: "下载 PDF 文档",
+                        downloadSVG: "下载 SVG 失量图",
+                        exportButtonTitle: "导出失量或位图"
+                    },
+                    chart: {
+                        type: 'area',
+                        events: {
+                            load: function () {
+                                var series = this.series[0];
+                                $.getJSON('demo.php', function (data) {
+                                    series.setData(data);
+                                });
+                            }
+                        }
+                    },
+                    title: {
+                        text: '服务器内存'
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return'<strong>' + this.series.name + '</strong>' +
+                                    Highcharts.dateFormat('%H:%M', this.x) + ': ' + this.y + 'M';
+                        }
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        dateTimeLabelFormats: {
+                           day: '%H:%M'
+                        },
+                        
+                        title: {
+                            text: '时间'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: '单位(M)'
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                            name: '今天',
+                            color: '#81B3EF',
+                            pointInterval: 5 * 60 * 1000, // one day
+                            data: []
+                        }]
+                });
+            });
+        </script>
+    </body>
+</html>
